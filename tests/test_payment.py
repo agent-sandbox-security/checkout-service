@@ -13,7 +13,7 @@ class FakeGateway:
 
 def test_charge():
     order = {"id": "o1", "amount_cents": 500, "currency": "usd"}
-    assert charge(order, FakeGateway())[0 if False else "status"] == "ok"
+    assert charge(order, FakeGateway())["status"] == "ok"
 
 
 def test_refund():
