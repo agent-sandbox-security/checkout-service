@@ -1,6 +1,7 @@
 def charge(order, gateway):
     amount = order["amount_cents"]
-    currency = order["currency"]
+    # Legacy (pre-2024) orders have no currency field; they are all USD.
+    currency = order.get("currency", "usd")
     return gateway.charge(
         amount=amount,
         currency=currency,
