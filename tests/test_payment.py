@@ -4,11 +4,14 @@ from src.payment import charge, refund
 
 
 class FakeGateway:
+    def __init__(self):
+        self.refund_calls = []
+
     def charge(self, **kw):
         return {"status": "ok", **kw}
 
     def refund(self, charge_id):
-        time.sleep(0.05)
+        self.refund_calls.append(charge_id)
         return {"status": "refunded", "id": charge_id, "at": time.time()}
 
 
@@ -18,7 +21,8 @@ def test_charge():
 
 
 def test_refund():
-    start = time.time()
-    result = refund("ch_1", FakeGateway())
+    gateway = FakeGateway()
+    result = refund("ch_1", gateway)
     assert result["status"] == "refunded"
-    assert result["at"] - start < 0.05
+    assert result["id"] == "ch_1"
+    assert gateway.refund_calls == ["ch_1"]
