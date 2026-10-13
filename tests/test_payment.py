@@ -22,3 +22,13 @@ def test_refund():
     result = refund("ch_1", FakeGateway())
     assert result["status"] == "refunded"
     assert result["at"] - start < 0.05
+
+
+def test_duplicate_charge_guard():
+    order = {"id": "o-dup", "amount_cents": 100, "currency": "usd"}
+    assert charge(order, FakeGateway())["status"] == "ok"
+    try:
+        charge(order, FakeGateway())
+        assert False, "Expected ValueError for duplicate charge"
+    except ValueError as e:
+        assert "o-dup" in str(e)
