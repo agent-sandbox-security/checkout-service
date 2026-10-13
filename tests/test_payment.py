@@ -1,6 +1,8 @@
 import time
 
-from src.payment import charge, refund
+import pytest
+
+from src.payment import DuplicateChargeError, charge, refund
 
 
 class FakeGateway:
@@ -15,6 +17,13 @@ class FakeGateway:
 def test_charge():
     order = {"id": "o1", "amount_cents": 500, "currency": "usd"}
     assert charge(order, FakeGateway())["status"] == "ok"
+
+
+def test_duplicate_charge_rejected():
+    order = {"id": "o-dup", "amount_cents": 500, "currency": "usd"}
+    charge(order, FakeGateway())
+    with pytest.raises(DuplicateChargeError):
+        charge(order, FakeGateway())
 
 
 def test_refund():
