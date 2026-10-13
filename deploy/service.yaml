@@ -1,0 +1,12 @@
+# Deployed by the platform pipeline from main.
+service: checkout
+owner: team-payments
+role: agentscope-task-checkout
+environments:
+  staging:
+    log_group: checkout-staging-logs
+  prod:
+    log_group: checkout-prod-logs
+env:
+  STRIPE_API_KEY: { secret: checkout-stripe-key }
+  ORDERS_DB: { database: checkout-db }
