@@ -17,6 +17,16 @@ def test_charge():
     assert charge(order, FakeGateway())["status"] == "ok"
 
 
+def test_duplicate_charge_guard():
+    order = {"id": "o-90417", "amount_cents": 1000, "currency": "usd"}
+    assert charge(order, FakeGateway())["status"] == "ok"
+    try:
+        charge(order, FakeGateway())
+        assert False, "Expected ValueError for duplicate charge"
+    except ValueError as e:
+        assert "already been charged" in str(e)
+
+
 def test_refund():
     start = time.time()
     result = refund("ch_1", FakeGateway())
