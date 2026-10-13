@@ -1,6 +1,11 @@
+SUPPORTED_CURRENCIES = {"usd", "eur", "gbp"}
+
+
 def charge(order, gateway):
     amount = order["amount_cents"]
     currency = order["currency"]
+    if currency not in SUPPORTED_CURRENCIES:
+        raise ValueError(f"unsupported currency: {currency!r}")
     return gateway.charge(
         amount=amount,
         currency=currency,
