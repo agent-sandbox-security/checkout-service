@@ -22,3 +22,8 @@ def test_refund():
     result = refund("ch_1", FakeGateway())
     assert result["status"] == "refunded"
     assert result["at"] - start < 0.05
+
+
+def test_refund_passes_charge_id_to_gateway():
+    result = refund("ch_42", FakeGateway())
+    assert result["id"] == "ch_42"
