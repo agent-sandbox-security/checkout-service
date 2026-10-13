@@ -17,6 +17,14 @@ def test_charge():
     assert charge(order, FakeGateway())["status"] == "ok"
 
 
+def test_charge_legacy_order_no_currency():
+    """Legacy orders (pre-2024 migration) have no currency field; they default to USD."""
+    order = {"id": "o2", "amount_cents": 1000}
+    result = charge(order, FakeGateway())
+    assert result["status"] == "ok"
+    assert result["currency"] == "usd"
+
+
 def test_refund():
     start = time.time()
     result = refund("ch_1", FakeGateway())
