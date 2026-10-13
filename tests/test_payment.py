@@ -23,7 +23,7 @@ class RecordingGateway:
 
 def test_charge():
     order = {"id": "o1", "amount_cents": 500, "currency": "usd"}
-    assert charge(order, FakeGateway())[\"status\"] == "ok"
+    assert charge(order, FakeGateway())["status"] == "ok"
 
 
 def test_refund():
