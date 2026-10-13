@@ -1,6 +1,6 @@
 def charge(order, gateway):
     amount = order["amount_cents"]
-    currency = order["currency"]
+    currency = order.get("currency", "USD")
     return gateway.charge(
         amount=amount,
         currency=currency,
